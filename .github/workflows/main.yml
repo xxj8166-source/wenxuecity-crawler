@@ -1,0 +1,27 @@
+name: Cloud Year Long Crawler
+
+on:
+  workflow_dispatch: # 允许你手动在网页上点击按钮开始，开始后你就可以关电脑了
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. 检查代码
+      uses: actions/checkout@v3
+
+    - name: 2. 初始化 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 3. 安装依赖包
+      run: |
+        pip install requests beautifulsoup4 pandas openpyxl
+
+    - name: 4. 执行云端抓取并发送至TG
+      env:
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      run: python main.py
